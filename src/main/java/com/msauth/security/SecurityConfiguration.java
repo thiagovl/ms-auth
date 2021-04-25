@@ -75,7 +75,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
                 /* configure access roles */
                 .antMatchers(HttpMethod.POST, "/api/authenticate", "/api/pass").permitAll()                 
-                .antMatchers("/api/index", "/api/logout", "/logout", "/eureka").permitAll()  
+                .antMatchers("/api/index", "/api/logout", "/logout", "/eureka", "/actuator").permitAll()  
                 .antMatchers("/api/users", "/api/users/**").hasAnyAuthority("ROLE_ADMIN")
                                                 
                 /* Block if you are not authenticated */
