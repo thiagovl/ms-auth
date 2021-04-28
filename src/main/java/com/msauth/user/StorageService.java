@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,7 +30,8 @@ import com.msauth.config.FirebaseCredentials;
 public class StorageService {
 
 	private final Environment environment;
-	private String bucketName = null;
+	@Value("${BUCKET_NAME}")
+	private String bucketName;
 		
 	
 	public StorageService (Environment environment) {

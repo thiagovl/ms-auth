@@ -94,6 +94,31 @@ public class UserService {
 			return user;
 		}
 	
+	/**
+	 * 
+	 * @param name
+	 * @return User for id
+	 * @throws ExecutionException
+	 * @throws InterruptedException
+	 */
+	public User findById(String id) throws ExecutionException, InterruptedException {
+			
+			CollectionReference ref = FirestoreClient.getFirestore().collection(COLLECTION_NAME);
+			Query query = ref.whereEqualTo("id", id);
+			ApiFuture<QuerySnapshot> querySnapshot = query.get();
+			User user = new User();
+			for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+				  user.setId(document.getId());
+				  user.setName(document.getString("name"));
+				  user.setEmail(document.getString("email"));
+				  user.setPassword(document.getString("password"));
+				  user.setEnable(document.getBoolean("enable"));
+				  user.setImageUrl(document.getString("imageUrl"));
+				  user.setRole(document.getString("role"));
+			}
+			return user;
+		}
+	
 	
 	/**
 	 * 
@@ -138,9 +163,16 @@ public class UserService {
 	/**
 	 * 
 	 * @param ID
+	 * @throws Exception 
 	 */
-	public void delete(String id) {
+	public void delete(String id) throws Exception {
 		DocumentReference docRef = (DocumentReference) FirestoreClient.getFirestore().collection(COLLECTION_NAME).document(id);
+		User user = findById(id);
+		String imageUrl = user.getImageUrl();
+		String aux1 = imageUrl.replace("https://firebasestorage.googleapis.com/v0/b/api-ms-security.appspot.com/o/", "");
+		String aux2 = aux1.replace("?alt=media", "");
+		System.out.print(aux2);
+		service.delete(aux2);
 		docRef.delete();
 	}
 

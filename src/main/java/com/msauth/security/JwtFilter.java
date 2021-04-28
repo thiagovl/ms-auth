@@ -27,7 +27,6 @@ public class JwtFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userRepository;
 
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // Read the Authorization header, where the JWT token should be
