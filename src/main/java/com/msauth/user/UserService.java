@@ -122,6 +122,32 @@ public class UserService {
 	
 	/**
 	 * 
+	 * @param email
+	 * @return User for text
+	 * @throws ExecutionException
+	 * @throws InterruptedException
+	 */
+	public User findByText(String textSearch) throws ExecutionException, InterruptedException {
+		
+		CollectionReference ref = FirestoreClient.getFirestore().collection(COLLECTION_NAME);
+		Query query = ref.whereLessThan("name", textSearch);
+		ApiFuture<QuerySnapshot> querySnapshot = query.get();
+		User user = new User();
+		for (DocumentSnapshot document : querySnapshot.get().getDocuments()) {
+			  user.setId(document.getId());
+			  user.setName(document.getString("name"));
+			  user.setEmail(document.getString("email"));
+			  user.setPassword(document.getString("password"));
+			  user.setEnable(document.getBoolean("enable"));
+			  user.setImageUrl(document.getString("imageUrl"));
+			  user.setRole(document.getString("role"));
+		}
+		return user;
+	}
+	
+	
+	/**
+	 * 
 	 * @param User
 	 * @throws ExecutionException
 	 * @throws InterruptedException

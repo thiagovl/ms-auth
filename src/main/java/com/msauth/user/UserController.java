@@ -121,6 +121,32 @@ public class UserController {
 	
 	/**
 	 * 
+	 * @param name
+	 * @return User for text
+	 */
+	@PostMapping("/users/text/name")
+	public ResponseEntity<?> getByNameTextUsers(@RequestBody Name name) 
+			throws ExecutionException, InterruptedException {
+
+		User user = null;
+		HashMap<String, String> message = new HashMap<>();
+		try {
+			user = service.findByText(name.getName());
+			if(user.getName() == null) {
+				message.put("Success", "true");
+				message.put("Message", "Não há usuário com este email!");
+				return new ResponseEntity<>(message, HttpStatus.OK);
+			}
+		} catch (Exception e) {
+			message.put("Success", "false");
+			message.put("Message", e.getMessage());
+ 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(message);
+		}
+		return ResponseEntity.ok().body(user);
+	}
+	
+	/**
+	 * 
 	 * @return Message Access Denied
 	 */
 	@GetMapping(value = "/access-denied")
